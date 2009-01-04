@@ -1,0 +1,65 @@
+# Contributor: atommix aka Aleks Lifey <Aleks.Lifey@gmail.com>
+
+pkgname=qutim-core-svn
+pkgver=105
+pkgrel=1
+pkgdesc="Multiplatform instant messenger, with plugin system. Currently support ICQ, Jabber, MRIM and other additional plugins"                                                                                         
+arch=('i686' 'x86_64')
+url="http://qutim.org"
+license=('GPL')
+makedepends=('subversion' 'cmake' 'gcc')
+depends=('qt')
+conflicts=('qutim' 'qutim-svn' 'qutim-svn-dev' 'qutim-archangel')
+provides=('qutim' 'qutim-svn' 'qutim-svn-dev' 'qutim-archangel')
+groups=('qutim-base' 'qutim-complete')
+source=()                                                                                                   
+md5sums=()
+
+_svnmod=qutim
+_svntrunk=http://qutim.org/svn/$_svnmod
+
+build() {
+ . ../../optimizations
+ msg "Getting sources from SVN..."
+
+  if [ -d $_svnmod/.svn ]; then
+    cd $_svnmod && svn up
+  else
+    svn co $_svntrunk $_svnmod
+  fi
+
+ msg "SVN checkout done or server timeout"
+ msg "Starting make..."
+
+ cd $srcdir/$_svnmod
+ if [ -d build ]; then
+	cd build
+ else
+	mkdir build
+	cd build
+	cmake .. -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
+ fi
+
+ make || return 1
+ mkdir -p $pkgdir/usr/bin/
+ install -Dm 755 qutim $pkgdir/usr/bin/ || return 1
+
+ mkdir -p $pkgdir/usr/include/qutim
+ install -Dm 644 $srcdir/$_svnmod/include/qutim/*.h $pkgdir/usr/include/qutim/ || return 1
+
+ mkdir -p $pkgdir/usr/share/pixmaps
+ cp $srcdir/$_svnmod/icons/qutim_64.png $pkgdir/usr/share/pixmaps/qutim.png
+
+ mkdir -p $pkgdir/usr/share/applications
+
+ echo "[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=qutIM
+Exec=qutim
+Terminal=false
+Icon=/usr/share/pixmaps/qutim.png
+Categories=Application;Network;" > $pkgdir/usr/share/applications/qutim.desktop
+
+
+}

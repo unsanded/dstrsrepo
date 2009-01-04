@@ -1,0 +1,49 @@
+# Contributor: atommix aka Aleks Lifey <Aleks.Lifey@gmail.com>
+
+pkgname=qutim-plugin-jabber-svn
+pkgver=146
+pkgrel=1
+pkgdesc="Jabber plugin for qutim-core"
+arch=('i686' 'x86_64')
+url="http://qutim.org"
+license=('GPL')
+makedepends=('subversion' 'qutim-core-svn')
+depends=()
+conflicts=()
+provides=()
+
+source=()                              
+md5sums=()
+#category lib
+
+_svnmod=jabber
+_svntrunk=http://qutim.org/svn/$_svnmod
+
+build() {
+ . ../../optimizations
+
+ msg "Getting sources from SVN..."
+
+  if [ -d $_svnmod/.svn ]; then
+    cd $_svnmod && svn up
+  else
+    svn co $_svntrunk $_svnmod
+  fi
+
+ msg "SVN checkout done or server timeout"
+ msg "Starting make..."
+ 
+ cd $srcdir/$_svnmod
+ if [ -d build ]; then
+        cd build
+ else
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
+ fi
+
+ make || return 1
+ mkdir -p $pkgdir/usr/lib/qutim/ 
+ install -Dm 644 $srcdir/$_svnmod/build/lib$_svnmod.so \
+  $pkgdir/usr/lib/qutim/ || return 1
+}
