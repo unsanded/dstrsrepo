@@ -1,0 +1,2 @@
+export CFLAGS="-O3 -pipe -fomit-frame-pointer"
+export CXXFLAGS="-O3 -pipe -fomit-frame-pointer"
