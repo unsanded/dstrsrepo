@@ -20,7 +20,7 @@ _svnmod=icq
 _svntrunk=http://qutim.org/svn/$_svnmod
 
 build() {
- . ../../optimizations
+ . ../../optimizations-$CARCH
 
  msg "Getting sources from SVN..."
 
@@ -28,16 +28,20 @@ build() {
     cd $_svnmod && svn up
   else
     svn co $_svntrunk $_svnmod
-    cd $_svnmod
   fi
 
+ cd $srcdir
+ cp -R $_svnmod $_svnmod-build
+ cd $_svnmod-build
  msg "SVN checkout done or server timeout"
  msg "Starting make..."
  
- [ -f Makefile ] || qmake
+ qmake
  make || return 1
 
  mkdir -p $pkgdir/usr/lib/qutim/ 
  install -Dm 644 $srcdir/lib$_svnmod.so \
   $pkgdir/usr/lib/qutim/ || return 1
+ cd ..
+ rm -rf $_svnmod-build
 }
