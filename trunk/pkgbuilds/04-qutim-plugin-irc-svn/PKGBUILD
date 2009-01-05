@@ -1,5 +1,5 @@
 pkgname=qutim-plugin-irc-svn
-pkgver=2
+pkgver=3
 pkgrel=1
 pkgdesc="IRC plugin for qutim-core"
 arch=('i686' 'x86_64')

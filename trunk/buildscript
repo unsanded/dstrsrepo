@@ -8,8 +8,7 @@ cd pkgbuilds
 for dir in $( ls ); do
 	cd "$workdir/pkgbuilds/$dir"
 	if makepkg --asroot; then
-		pkg=`ls *-$CARCH.pkg.tar.gz -1|tail -n 1`
-		if 
+		pkg=`ls *-$CARCH.pkg.tar.gz -1|tail -n 1` 
 		sudo pacman -U --noconfirm $pkg
 		cp $pkg "$workdir"/$CARCH 
 		cd "$workdir"/$CARCH
