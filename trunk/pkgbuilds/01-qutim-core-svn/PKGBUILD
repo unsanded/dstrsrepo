@@ -33,12 +33,14 @@ build() {
  msg "Starting make..."
 
  cd $srcdir/$_svnmod
+ rm -rf build
  mkdir build && cd build
- cmake .. -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
+ cmake .. -DCMAKE_BUILD_TYPE=RELWITHDEBINFO -DCMAKE_INSTALL_PREFIX=/usr
 
  make || return 1
- mkdir -p $pkgdir/usr/bin/
- install -Dm 755 qutim $pkgdir/usr/bin/ || return 1
+ make DESTDIR=$pkgdir install || return 1
+# mkdir -p $pkgdir/usr/bin/
+# install -Dm 755 qutim $pkgdir/usr/bin/ || return 1
 
  mkdir -p $pkgdir/usr/include/qutim
  install -Dm 644 $srcdir/$_svnmod/include/qutim/*.h $pkgdir/usr/include/qutim/ || return 1
