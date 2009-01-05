@@ -23,5 +23,6 @@ build() {
 
  mkdir -p $pkgdir/usr/bin
  install -Dm 755 $srcdir/$_svnmod-build/lib$_svnmod.so $pkgdir/usr/bin
-
+ cd ..
+ rm -rf smiles
 }
