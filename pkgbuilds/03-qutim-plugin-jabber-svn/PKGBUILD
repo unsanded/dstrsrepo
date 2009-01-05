@@ -20,7 +20,7 @@ _svnmod=jabber
 _svntrunk=http://qutim.org/svn/$_svnmod
 
 build() {
- . ../../optimizations
+ . ../../optimizations-$CARCH
 
  msg "Getting sources from SVN..."
 
@@ -34,16 +34,14 @@ build() {
  msg "Starting make..."
  
  cd $srcdir/$_svnmod
- if [ -d build ]; then
-        cd build
- else
-        mkdir build
-        cd build
-        cmake .. -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
- fi
+ mkdir build
+ cd build
+ cmake .. -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
 
  make || return 1
  mkdir -p $pkgdir/usr/lib/qutim/ 
  install -Dm 644 $srcdir/$_svnmod/build/lib$_svnmod.so \
   $pkgdir/usr/lib/qutim/ || return 1
+ cd ..
+ rm -rf build
 }
