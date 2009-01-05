@@ -1,23 +1,20 @@
-# Contributor: atommix aka Aleks Lifey <Aleks.Lifey@gmail.com>
-
-pkgname=qutim-plugin-jabber-svn
-pkgver=146
+pkgname=qutim-plugin-historymanager
+pkgver=27
 pkgrel=1
-pkgdesc="Jabber plugin for qutim-core"
+pkgdesc="Plugin to convert history from different clients to qutim"
 arch=('i686' 'x86_64')
 url="http://qutim.org"
 license=('GPL')
-makedepends=('subversion' 'qutim-core-svn')
+makedepends=()
 depends=(qt)
 conflicts=()
 provides=()
 
 source=()                              
 md5sums=()
-#category lib
 
-_svnmod=jabber
-_svntrunk=http://qutim.org/svn/$_svnmod
+_svnmod=qimhm
+_svntrunk=https://qimhm.svn.sourceforge.net/svnroot/qimhm
 
 build() {
  . ../../optimizations-$CARCH
@@ -30,19 +27,21 @@ build() {
     svn co $_svntrunk $_svnmod
   fi
 
+ cd $srcdir
+ rm -rf $_svnmod-build
+ cp -R $_svnmod $_svnmod-build
+ cd $_svnmod-build
  msg "SVN checkout done or server timeout"
  msg "Starting make..."
- 
- cd $srcdir/$_svnmod
- rm -rf build
- mkdir build
- cd build
- cmake .. -DCMAKE_BUILD_TYPE=RELWITHDEBINFO
 
+ qmake
  make || return 1
- mkdir -p $pkgdir/usr/lib/qutim/ 
- install -Dm 644 $srcdir/$_svnmod/build/lib$_svnmod.so \
+ make INSTALL_ROOT="$pkgdir" install
+
+ mkdir -p $pkgdir/usr/lib/qutim/
+ install -Dm 644 $srcdir/libhistorymanager.so \
   $pkgdir/usr/lib/qutim/ || return 1
  cd ..
- rm -rf build
+ rm -rf $_svnmod-build 
+
 }
