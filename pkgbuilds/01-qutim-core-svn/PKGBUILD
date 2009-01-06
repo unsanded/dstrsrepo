@@ -20,9 +20,9 @@ _svntrunk=http://qutim.org/svn/$_svnmod
 
 build() {
 . ../../optimizations-$CARCH
-
+ 
  msg "Getting sources from SVN..."
-
+ cd "$srcdir"
   if [ -d $_svnmod/.svn ]; then
     cd $_svnmod && svn up
   else

@@ -1,0 +1,45 @@
+# Contributor: marc.weidinger@gmail.com
+pkgname=eclipse-qt
+pkgver=1.4.3
+pkgrel=2
+pkgdesc="Qt Eclipse integration for C++"
+arch=('i686' 'x86_64')
+url="http://trolltech.com/developer/eclipse-integration"
+license=('GPL')
+depends=('qt>=4.4.3' 'eclipse>=3.4' 'eclipse-cdt>=3.1.1')
+makedepends=('apache-ant')
+conflicts=('eclipse-qt4')
+install=${pkgname}.install
+[ $CARCH = "i686" ] && {
+    source=("http://dist.trolltech.com/developer/download/qt-eclipse-integration-linux.x86-${pkgver}-src.tar.gz")
+    _pltfrm="linux.x86"
+} || {
+    source=("http://dist.trolltech.com/developer/download/qt-eclipse-integration-linux.x86_64-${pkgver}-src.tar.gz")
+    _pltfrm="linux.x86_64"
+}
+
+
+build() {
+  _blt=${pkgname:8}-${_pltfrm}-${pkgver}
+  cd $srcdir/${_blt}
+
+  export QTDIR=/usr
+  export JAVADIR=${JAVA_HOME:=/opt/java}
+  export ECLIPSEDIR=/usr/share/eclipse
+
+  sed -i 's|\(^.*grep -F 4.4.3.*$\)|#makepkg_edit#\1|' build.sh
+  sed -i 's|\(^.*grep "org\[.\]eclipse\[.\]cdt.*jar".*$\)|#makepkg_edit#\1|' build.sh
+  # Ensure $QTDIR does not point to Qt3:
+  ${QTDIR}/bin/qmake --version | egrep '[^\.]4' >/dev/null || { 
+      echo '$QTDIR might not point to a Qt4 build'; return 1;
+  }
+
+  patch com.trolltech.qtcppproject/build.xml ${startdir}/include_dropins.patch || return 1
+
+  ./build.sh || return 1
+
+  mkdir -p ${pkgdir}/${ECLIPSEDIR}/dropins/eclipse 
+  cp -R ${srcdir}/${_blt}/eclipse/plugins ${pkgdir}/${ECLIPSEDIR}/dropins/eclipse/.
+  cp -R ${srcdir}/${_blt}/eclipse/features ${pkgdir}/${ECLIPSEDIR}/dropins/eclipse/.
+  chmod -R +r,go-w ${pkgdir}/${ECLIPSEDIR}/dropins/eclipse/*
+}

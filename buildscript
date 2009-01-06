@@ -1,5 +1,7 @@
 . ./account
+. ./whatupdate
 . /etc/makepkg.conf
+
 workdir="`dirname $0`"
 [ $workdir = "." ] && workdir="`pwd`"
 
@@ -8,8 +10,10 @@ cd pkgbuilds
 for dir in $( ls ); do
 	cd "$workdir/pkgbuilds/$dir"
 	if makepkg --asroot; then
-		pkg=`ls *-$CARCH.pkg.tar.gz -1|tail -n 1` 
-		sudo pacman -U --noconfirm $pkg
+		pkg=`ls *-$CARCH.pkg.tar.gz -1|tail -n 1`
+		for i in $update; do
+			[ ${pkg:0:${#i}} = $i ] && sudo pacman -U --noconfirm $pkg
+		done
 		cp $pkg "$workdir"/$CARCH 
 		cd "$workdir"/$CARCH
 		repo-add dstrsrepo.db.tar.gz $pkg
@@ -17,5 +21,7 @@ for dir in $( ls ); do
 	fi
 	cd "$workdir"
 done
+
+
 
 #svn commit --username $username --password $passwd -m "Auto commit by buildscript ($CARCH)"

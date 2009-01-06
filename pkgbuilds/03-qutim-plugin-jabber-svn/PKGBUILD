@@ -1,7 +1,7 @@
 # Contributor: atommix aka Aleks Lifey <Aleks.Lifey@gmail.com>
 
 pkgname=qutim-plugin-jabber-svn
-pkgver=146
+pkgver=148
 pkgrel=1
 pkgdesc="Jabber plugin for qutim-core"
 arch=('i686' 'x86_64')
@@ -23,7 +23,7 @@ build() {
  . ../../optimizations-$CARCH
 
  msg "Getting sources from SVN..."
-
+  cd "$srcdir"
   if [ -d $_svnmod/.svn ]; then
     cd $_svnmod && svn up
   else
