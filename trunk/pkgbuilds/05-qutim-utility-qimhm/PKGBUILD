@@ -14,7 +14,7 @@ source=()
 md5sums=()
 
 _svnmod=qimhm
-_svntrunk=https://qimhm.svn.sourceforge.net/svnroot/qimhm
+_svntrunk=http://qimhm.svn.sourceforge.net/svnroot/qimhm
 
 build() {
  . ../../optimizations-$CARCH
@@ -22,7 +22,7 @@ build() {
  msg "Getting sources from SVN..."
  cd "$srcdir"
   if [ -d $_svnmod/.svn ]; then
-	[ $CARCH = x86-64 ] && cd $_svnmod && svn up
+    cd $_svnmod && svn up
   else
     svn co $_svntrunk $_svnmod
   fi
