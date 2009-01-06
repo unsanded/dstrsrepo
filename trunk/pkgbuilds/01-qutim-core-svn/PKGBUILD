@@ -4,7 +4,7 @@ pkgname=qutim-core-svn
 pkgver=106
 pkgrel=3
 pkgdesc="Multiplatform instant messenger, with plugin system. Currently support ICQ, Jabber, MRIM and other additional plugins"                                                                                         
-arch=(any)
+arch=(x86_64 i686)
 url="http://qutim.org"
 license=('GPL')
 makedepends=('subversion' 'cmake' 'gcc')
@@ -59,6 +59,7 @@ Terminal=false
 Icon=/usr/share/pixmaps/qutim.png
 Categories=Application;Network;" > $pkgdir/usr/share/applications/qutim.desktop
 
+cd ..
 if [ $CARCH = x86_64 ]; then
 cp $srcdir/PKGBUILD-qtdoc .
 cp $srcdir/qutim-doc-assistant.install .
@@ -68,11 +69,14 @@ makepkg -p PKGBUILD-qtdoc --asroot
 cp qutim-doc-assistant-svn*pkg.tar.gz $startdir/../../x86_64
 cp qutim-doc-assistant-svn*pkg.tar.gz $startdir/../../i686
 
-repo-add $startdir/../../x86_64/dstrsrepo.db.tar.gz $startdir/../../x86_64/qutim-doc-assistant-svn*pkg.tar.gz
-repo-add $startdir/../../i686/dstrsrepo.db.tar.gz $startdir/../../i686/qutim-doc-assistant-svn*pkg.tar.gz
-svn add $startdir/../../x86_64/qutim-doc-assistant-svn*pkg.tar.gz $startdir/../../i686/qutim-doc-assistant-svn*pkg.tar.gz
+cd $startdir/../../x86_64
+repo-add dstrsrepo.db.tar.gz qutim-doc-assistant-svn*pkg.tar.gz
+svn add qutim-doc-assistant-svn*pkg.tar.gz
+cd ../i686
+repo-add dstrsrepo.db.tar.gz qutim-doc-assistant-svn*pkg.tar.gz
+svn add qutim-doc-assistant-svn*pkg.tar.gz
 fi
 
-cd ..
-rm -rf build
+cd $srcdir/$_svnmod
+#rm -rf build
 }
