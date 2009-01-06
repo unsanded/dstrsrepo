@@ -1,7 +1,7 @@
 # Contributor: atommix aka Aleks Lifey <Aleks.Lifey@gmail.com>
 
 pkgname=qutim-plugin-jabber-svn
-pkgver=148
+pkgver=149
 pkgrel=1
 pkgdesc="Jabber plugin for qutim-core"
 arch=('i686' 'x86_64')
