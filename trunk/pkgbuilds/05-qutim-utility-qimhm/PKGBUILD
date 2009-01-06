@@ -22,7 +22,7 @@ build() {
  msg "Getting sources from SVN..."
  cd "$srcdir"
   if [ -d $_svnmod/.svn ]; then
-    cd $_svnmod && svn up
+	[ $CARCH = x86-64 ] && cd $_svnmod && svn up
   else
     svn co $_svntrunk $_svnmod
   fi
