@@ -20,7 +20,7 @@ install=${pkgname}.install
 
 
 build() {
-  _blt=${pkgname:8}-${_pltfrm}-${pkgver}
+  _blt=qt-eclipse-integration-${_pltfrm}-${pkgver}
   cd $srcdir/${_blt}
 
   export QTDIR=/usr
