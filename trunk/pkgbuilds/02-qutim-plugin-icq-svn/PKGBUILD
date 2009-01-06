@@ -2,7 +2,7 @@
 
 pkgname=qutim-plugin-icq-svn
 pkgver=26
-pkgrel=1
+pkgrel=2
 pkgdesc="ICQ plugin for qutim-core"
 arch=('i686' 'x86_64')
 url="http://qutim.org"
@@ -36,7 +36,7 @@ build() {
  msg "SVN checkout done or server timeout"
  msg "Starting make..."
  
- qmake
+ qmake -config debug
  make || return 1
 
  mkdir -p $pkgdir/usr/lib/qutim/ 
