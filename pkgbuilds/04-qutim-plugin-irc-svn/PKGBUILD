@@ -1,6 +1,6 @@
 pkgname=qutim-plugin-irc-svn
 pkgver=5
-pkgrel=1
+pkgrel=2
 pkgdesc="IRC plugin for qutim-core"
 arch=('i686' 'x86_64')
 url="http://qutim.org"
@@ -34,7 +34,7 @@ build() {
  msg "SVN checkout done or server timeout"
  msg "Starting make..."
 
- qmake
+ qmake -config debug
  make || return 1
 
  mkdir -p $pkgdir/usr/lib/qutim/

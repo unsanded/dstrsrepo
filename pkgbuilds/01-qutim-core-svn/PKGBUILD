@@ -2,7 +2,7 @@
 
 pkgname=qutim-core-svn
 pkgver=106
-pkgrel=1
+pkgrel=2
 pkgdesc="Multiplatform instant messenger, with plugin system. Currently support ICQ, Jabber, MRIM and other additional plugins"                                                                                         
 arch=('i686' 'x86_64')
 url="http://qutim.org"
